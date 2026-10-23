@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+            margin: 0;
+        }
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 380px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #1a1a1a;
+            font-size: 22px;
+            text-align: center;
+        }
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            display: block;
+            margin-top: 12px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #a0c8f0;
+        }
+        /* Disappear Animation Message */
+        #success-msg {
+            display: none;
+            text-align: center;
+            padding: 30px 10px;
+        }
+        #success-msg h3 {
+            color: #28a745;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="form-card">
+    
+    <!-- Form Starts Here -->
+    <form id="myForm">
+        <h2>Information Form</h2>
+
+        <!-- Disable Captcha via Hidden Input -->
+        <input type="hidden" name="_captcha" value="false">
+
+        <label>Naam:</label>
+        <input type="text" name="Naam" placeholder="Apna naam likhein" required>
+
+        <label>Email:</label>
+        <input type="email" name="Email" placeholder="Apna email likhein" required>
+
+        <label>Phone Number:</label>
+        <input type="tel" name="Phone_Number" placeholder="0300-1234567" required>
+
+        <label>Message / Detail:</label>
+        <textarea name="Message" rows="3" placeholder="Yahan detail likhein..."></textarea>
+
+        <button type="submit" id="btn">Submit Karein</button>
+    </form>
+
+    <!-- Message Shown After Submit -->
+    <div id="success-msg">
+        <h3>✔ Thank You!</h3>
+        <p>Aapka data submit ho gaya hai.</p>
+        <p style="font-size: 12px; color: #888;">Yeh page ab close ho raha hai...</p>
+    </div>
+
+</div>
+
+<script>
+    const form = document.getElementById('myForm');
+    const formCard = document.getElementById('form-card');
+    const successMsg = document.getElementById('success-msg');
+    const btn = document.getElementById('btn');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Page reload hone se rokta hai
+
+        btn.innerText = "Submitting...";
+        btn.disabled = true;
+
+        const formData = new FormData(form);
+
+        // Background me FormSubmit ko data bhej raha hai
+        fetch('https://formsubmit.co/ajax/salmansiddique908@gmail.com', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Form ko chhupa dein
+            form.style.display = 'none';
+            // Success message dikhayen
+            successMsg.style.display = 'block';
+
+            // Mobile Tab ko auto close karne ki koshish karein
+            setTimeout(() => {
+                window.close(); // Mobile browser window close karega
+            }, 2500);
+        })
+        .catch(error => {
+            alert('Koi masla aya, dubara try karein.');
+            btn.innerText = "Submit Karein";
+            btn.disabled = false;
+        });
+    });
+</script>
+
+</body>
+</html>
